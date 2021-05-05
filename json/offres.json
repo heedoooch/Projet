@@ -1,0 +1,112 @@
+[    {
+        "albumId": 1,
+        "id": 1,
+        "title": "Abonnement TAWASSOL CLASSIC",
+        "text":"1000DA/mois",
+        "thumbnail":"./assets/card-thumb.png",
+        "image":"./assets/card.png"
+
+    },
+
+    {
+        "albumId":1,
+        "id":2,
+        "title":"Abonnement Hebdomadaire",
+        "text":"350DA/semaine",
+        "thumbnail":"./assets/card-thumb.png",
+        "image":"./assets/card.png"
+    },
+
+    {
+        "albumId":1,
+        "id":3,
+        "title":"Abonnement TAWASSOL JUNIOR",
+        "text":"840DA/mois",
+        "thumbnail":"./assets/kids-thumb.png",
+        "image":"./assets/kids.png"
+    },
+
+    {
+        "albumId":1,
+        "id":4,
+        "title":"Abonnement TAWASSOL SENIOR",
+        "text":"720DA/mois",
+        "thumbnail":"./assets/old-thumb.png",
+        "image":"./assets/old.png"
+    },
+
+    {
+        "albumId":1,
+        "id":5,
+        "title":"Abonnement TAWASSOL DJAMI3I ",
+        "text":"600DA/mois",
+        "thumbnail":"./assets/college-thumb.png",
+        "image":"./assets/college.png"
+
+    },
+    {
+        "albumId":1,
+        "id":6,
+        "title":"Abonnement TAWASSOL MADRASSI",
+        "text":"300DA/mois",
+        "thumbnail":"./assets/kids-thumb.png",
+        "image":"./assets/kids.png"
+    },
+
+
+    {
+        "albumId":1,
+        "id":7,
+        "title":"Abonnement TAWASSOL EL DJAMI3I annuel",
+        "text":"6000DA/an",
+        "thumbnail":"./assets/college-thumb.png",
+        "image":"./assets/college.png"
+    },
+
+    {
+        "albumId":1,
+        "id":8,
+        "title":"Abonnement TAWASSOL EL MADRASSI annuel",
+        "text":"3000DA/an",
+        "thumbnail":"./assets/kids-thumb.png",
+        "image":"./assets/kids.png"
+    },
+
+    {
+        "albumId":1,
+        "id":9,
+        "title":"Ticket 01 voyage",
+        "text":"30DA",
+        "thumbnail":"./assets/ticket-thumb.png",
+        "image":"./assets/ticket.png"
+    },
+
+
+    {
+        "albumId":1,
+        "id":10,
+        "title":"Ticket une journée",
+        "text":"120DA",
+        "thumbnail":"./assets/ticket-thumb.png",
+        "image":"./assets/ticket.png"
+    },
+
+    {
+        "albumId":1,
+        "id":11,
+        "title":"Ticket 10 voyages",
+        "text":"240DA",
+        "thumbnail":"./assets/ticket-thumb.png",
+        "image":"./assets/ticket.png"
+    },
+
+
+    {
+        "albumId":1,
+        "id":12,
+        "title":"Ticket Tram + Parking",
+        "text":"70DA",
+        "thumbnail":"./assets/ticket-thumb.png",
+        "image":"./assets/ticket.png"
+    }
+]
