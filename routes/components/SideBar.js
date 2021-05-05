@@ -4,7 +4,7 @@ import {View, Text,ScrollView,ImageBackground,Image, StyleSheet} from 'react-nat
 export default SideBar = props => (
     <ScrollView>
         <ImageBackground source={require("./backgr.jpg")} style={{ padding:16,paddingTop:38}}>
-        <Image source={require("/Users/mac/Desktop/Setram/assets/profile.png")} style={styles.profile}/>
+        <Image source={require("../../assets/profile.png")} style={styles.profile}/>
         <Text style={styles.name}> Full Name </Text>
         </ImageBackground>
         <View style={styles.container}>
