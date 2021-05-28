@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet,Text, View} from 'react-native';
+import {StyleSheet,Text, View,Platform} from 'react-native';
 import {MaterialIcons} from '@expo/vector-icons';
 
 export default function Header({navigation}){
@@ -24,10 +24,6 @@ const styles= StyleSheet.create({
         alignItems:'center',
         justifyContent:'center',
         borderBottomWidth: 0,
-        
-
-    
-        
     },
     headerText:{
         fontWeight: 'bold',
@@ -38,7 +34,7 @@ const styles= StyleSheet.create({
      },
      icon:{
         position:'absolute',
-        left: -69
+        left:  Platform.OS === 'android' ? 4 : -70
 
      }
 

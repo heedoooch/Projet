@@ -7,6 +7,7 @@ import AboutStack from './AboutStack';
 import OffresStack from './OffresStack';
 import SideBar from './components/SideBar';
 import AlertStack from './AlertStack';
+import ContactStack from "./ContactStack"
 
 
 import { Image} from 'react-native';
@@ -37,13 +38,21 @@ import { Image} from 'react-native';
           style={{height:24, width:24}}/>),
         },
       },
+      Contact:{
+        screen: ContactStack,
+        navigationOptions:{  drawerIcon:(<Image source={require('../assets/apple-contacts.png')}
+        style={{height:24, width:24}}/>)
+  ,
+      },
+    },
       About:{
         screen: AboutStack,
         navigationOptions:{  drawerIcon:(<Image source={require('../assets/about.png')}
         style={{height:24, width:24}}/>)
-,
+      ,
       },
     },
+   
 
     },
     {

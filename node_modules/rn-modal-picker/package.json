@@ -1,0 +1,50 @@
+{
+  "name": "rn-modal-picker",
+  "version": "0.3.1",
+  "private": false,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "prop-types": "15.6.2"
+  },
+  "devDependencies": {
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "24.1.0",
+    "jest": "24.1.0",
+    "metro-react-native-babel-preset": "0.52.0",
+    "react": "16.9.0",
+    "react-native": "0.61.4",
+    "react-test-renderer": "16.6.3"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "jest": {
+    "preset": "react-native"
+  },
+  "description": "This is a cross-platform picker with search bar for react native support both platform IOs and android",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vishaldhanotiya/react-native-modal-picker.git"
+  },
+  "keywords": [
+    "react-native",
+    "react-native-picker",
+    "modal-picker",
+    "dropdown",
+    "modal-selector",
+    "modal-dropdown",
+    "rn-modal-picker",
+    "rn-picker-dialog"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vishaldhanotiya/react-native-modal-picker/issues"
+  },
+  "homepage": "https://github.com/vishaldhanotiya/react-native-modal-picker#readme"
+}
