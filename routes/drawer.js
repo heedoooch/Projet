@@ -59,7 +59,7 @@ import { Image} from 'react-native';
       contentComponent: props => <SideBar{...props}/>,
      contentOptions:{
        activeBackgroundColor:"rgba(63,191,191,0.2)",
-       activeTintColor:"#38B497"
+       activeTintColor:"#38B497", drawerBackgroundColor: '#0000FF',
      }
     }
 

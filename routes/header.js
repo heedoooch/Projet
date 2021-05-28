@@ -29,10 +29,11 @@ const styles= StyleSheet.create({
         fontWeight: 'bold',
         fontSize:22,
         justifyContent:'center',
-        color:'black',
+        color: "#38B497",
         letterSpacing:1,
      },
      icon:{
+
         position:'absolute',
         left:  Platform.OS === 'android' ? 4 : -70
 

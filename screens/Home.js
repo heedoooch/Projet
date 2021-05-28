@@ -85,7 +85,6 @@ export default function Home( { navigation }) {
       latitudeDelta: 0.013912707615531872,
       longitudeDelta: 0.010586678981781006,
     })}
-  
     return (
       <>
         <StatusBar barStyle = "dark-content" hidden = {false}  translucent = {false}/>
