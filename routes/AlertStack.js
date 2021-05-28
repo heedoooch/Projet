@@ -1,4 +1,3 @@
-
 import {createStackNavigator} from 'react-navigation-stack';
 import Alert from '../screens/Alert';
 import Header from './header';
