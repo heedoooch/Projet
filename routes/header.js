@@ -17,12 +17,13 @@ export default function Header({navigation}){
 }
 const styles= StyleSheet.create({
     header:{
+        
         width:'100%',
         height:'90%',
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'center',
-        borderBottomWidth: 2,
+        borderBottomWidth: 0,
     },
     headerText:{
         fontWeight: 'bold',

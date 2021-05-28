@@ -74,5 +74,4 @@ const styles = StyleSheet.create({
   },
   date : {
     textAlign : "right"
-  },
-})
+  },})
