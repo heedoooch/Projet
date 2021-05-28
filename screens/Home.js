@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useMemo } from 'react';
+ import React, { useCallback, useRef, useMemo } from 'react';
 import {useState, useEffect} from "react";
 import * as Location from 'expo-location';
 import { getDistance, getPreciseDistance, } from 'geolib'
@@ -6,7 +6,7 @@ import {markers} from './mapdata';
 import Animated from 'react-native-reanimated';
 import { BottomSheet } from 'react-native-btr';
 import ModalSelector from 'react-native-modal-selector-searchable';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
 import { StyleSheet, View ,Image,StatusBar,Platform,ScrollView,Text, TextInput,Dimensions,Pressable,TouchableOpacity} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -49,9 +49,7 @@ export default function Home( { navigation }) {
   const [text, setText] = useState('');
   const mapRef = React.createRef(); 
   const [visible, setVisible] = useState(false);
-  const toggleBottomNavigationView = () => {
-   setVisible(!visible);
-      };
+  
   var options = {
     enableHighAccuracy: true,
     timeout: 5000,
@@ -70,19 +68,24 @@ export default function Home( { navigation }) {
     console.warn(`ERREUR (${err.code}): ${err.message}`);
     }
   navigator.geolocation.getCurrentPosition(success, error, options);
+  const toggleBottomNavigationView = () => {
+    setVisible(!visible);
+       };
+       /*const dis = getPreciseDistance(
+        { latitude: latt, longitude: longg},
+        { latitude: location.coordinate.latitude, longitude: location.coordinate.longitude},
+      );*/
+      /*
+    //alert('La distance est :  '+ dis +' en M ' + dis/1000 +' KM');
+    };*/
   let  onMarkerPressed = (location) => {
     mapRef.current.animateToRegion({
       latitude: location.coordinate.latitude,
       longitude: location.coordinate.longitude,
-      latitudeDelta: 0.001,
-      longitudeDelta: 0.009,
-    })
-  const dis = getPreciseDistance(
-      { latitude: latt, longitude: longg},
-      { latitude: location.coordinate.latitude, longitude: location.coordinate.longitude},
-    );
-    alert('La distance est :  '+ dis +' en M ' + dis/1000 +' KM');
-    };
+      latitudeDelta: 0.013912707615531872,
+      longitudeDelta: 0.010586678981781006,
+    })}
+  
     return (
       <>
         <StatusBar barStyle = "dark-content" hidden = {false}  translucent = {false}/>
@@ -97,7 +100,7 @@ export default function Home( { navigation }) {
               longitudeDelta:0.04290930926799774,
               latitudeDelta:0.05637356632725954,}}
               mapType= 'terrain' 
-              //onRegionChangeComplete={console.log}  
+              onRegionChangeComplete={console.log}  
             >
             {state.markers.map((marker, index) =>  (
                       <MapView.Marker 
@@ -118,22 +121,30 @@ export default function Home( { navigation }) {
                       </MapView.Marker>
                     ))}
             </MapView>
+            <View 
+              style={styles.searchBox} >
             <ModalSelector
               data={markers}
-              style={styles.searchBox}
               accessible={true}
               scrollViewAccessibilityLabel={'Scrollable options'}
-              cancelButtonAccessibilityLabel={'Cancel Button'}
+              //cancelButtonAccessibilityLabel={'Cancel Button'}
               onChange={(option)=>{ setText(option.label); onMarkerPressed(option); toggleBottomNavigationView();}} >
+                
                 <TextInput
                   placeholder="Search here"
                   placeholderTextColor="black"
                   autoCapitalize="none"
-                  style={{flex:1,padding:0,width:'100%'}}
+                  style={{paddingLeft:3,width: 326,}}
                   //editable={false}
                   onChangeText={text => setText(text)}
                   value={text} /> 
+                   
+                  
             </ModalSelector>
+            
+            <Ionicons name="ios-search" size={20} /> 
+            
+            </View>
             <ScrollView
               horizontal
               scrollEventThrottle={1}
@@ -162,7 +173,7 @@ export default function Home( { navigation }) {
           <View
               style={{flex: 1,flexDirection: 'column',justifyContent: 'space-between',}}>
               <Text
-                style={{extAlign: 'center',padding: 20,fontSize: 20,}}>
+                style={{textAlign: 'center',padding: 20,fontSize: 20,}}>
                </Text>
               <View style={styles.first} >
                   <Image style={styles.tram} />
@@ -213,10 +224,11 @@ export default function Home( { navigation }) {
     },
     searchBox: {
       position:'absolute', 
-      marginTop: Platform.OS === 'ios' ? 7 : 9, 
+      marginTop: Platform.OS === 'ios' ? 5 : 9, 
       flexDirection:"row",
       backgroundColor: '#fff',
       width: '98%',
+      height:40,
       borderRadius:20,
       alignSelf:'center',
       padding: 10,
