@@ -40,7 +40,7 @@ import { Image} from 'react-native';
       },
       Contact:{
         screen: ContactStack,
-        navigationOptions:{  drawerIcon:(<Image source={require('../assets/apple-contacts.png')}
+        navigationOptions:{  drawerIcon:(<Image source={require('../assets/att.png')}
         style={{height:24, width:24}}/>)
   ,
       },

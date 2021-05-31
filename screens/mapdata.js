@@ -1,6 +1,4 @@
 export const markers = [  
-    {coordinate: {latitude:35.2097309,longitude:-0.6334479},
-     label: "khkkhk",},
      {coordinate: {latitude:35.205983163318884,longitude:-0.6264084696042183},
      label: "La Daira",},
      {coordinate: {latitude: 35.1907099,longitude:-0.6345366,},

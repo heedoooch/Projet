@@ -1,7 +1,9 @@
 import React, { useCallback, useRef, useMemo } from 'react';
 import {useState, useEffect} from "react";
 import * as Location from 'expo-location';
-import { getDistance, getPreciseDistance, } from 'geolib'
+import { getDistance, getPreciseDistance, } from 'geolib';
+import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
 import {markers} from './mapdata';
 import Animated from 'react-native-reanimated';
 import { BottomSheet } from 'react-native-btr';
@@ -85,6 +87,15 @@ export default function Home( { navigation }) {
       latitudeDelta: 0.013912707615531872,
       longitudeDelta: 0.010586678981781006,
     })}
+    let [fontsLoaded] = useFonts({
+      'Montserrat': require('../assets/fonts/Montserrat-Regular.ttf'),
+      'Montserrat-ExtraBold': require('../assets/fonts/Montserrat-ExtraBold.ttf'),
+      'Montserrat-SemiBold': require('../assets/fonts/Montserrat-SemiBold.ttf'),
+    });
+  
+    if (!fontsLoaded) {
+      return <AppLoading />;
+    }
     return (
       <>
         <StatusBar barStyle = "dark-content" hidden = {false}  translucent = {false}/>
@@ -114,7 +125,7 @@ export default function Home( { navigation }) {
                               <Image
                                 source={require('../assets/map_marker.png')}
                                 style={styles.marker}
-                                resizeMode="cover"
+                                resizeMode="contain"
                               />
                             </View>
                       </MapView.Marker>
@@ -164,48 +175,56 @@ export default function Home( { navigation }) {
                 </TouchableOpacity>))}
           </ScrollView>
         </View>
-     <BottomSheet
+        <BottomSheet
           visible={visible}
           onBackButtonPress={toggleBottomNavigationView}
           onBackdropPress={toggleBottomNavigationView} >
           <View style={styles.bottomNavigationView}>
+          <Text style={styles.markerTitle}>La Daira</Text>
           <View
               style={{flex: 1,flexDirection: 'column',justifyContent: 'space-between',}}>
-              <Text
-                style={{textAlign: 'center',padding: 20,fontSize: 20,}}>
-               </Text>
               <View style={styles.first} >
-                  <Image style={styles.tram} />
-                  <Text style={styles.prochain}> Prochains{"\n"}Tramways</Text>
+                  <Image
+                    style={styles.tram}
+                    source={require('../assets/tram.png')}
+                  />
+                  <Text style={styles.prochain}>Prochains{"\n"}Tramways</Text>
                   <View style={styles.textf}>
-                  <View >
-                      <Text style={styles.num}> 05  </Text>
-                      <Text style={styles.min}>  min </Text>
-                  </View>
-                   <View>
-                      <Text style={styles.num}> 05  </Text>
-                      <Text style={styles.min}>  min </Text>
-                  </View>
+                    <View>
+                        <Text style={styles.dir}>Gare Routière Sud</Text>
+                        <Text style={styles.num}>05</Text>
+                        <Text style={styles.min}>min</Text>
+                    </View>
+                    <View style={styles.tram2}>
+                        <Text style={styles.dir2}>Les Cascades</Text>
+                        <Text style={styles.num}>12</Text>
+                        <Text style={styles.min}>min</Text>
+                    </View>
                   </View>
                   
              </View>
 
              <View style={styles.sec}>
-                  <Image style={styles.dis} />
-                  <Text style={styles.res}> Distance{"\n"}restante</Text>
-                  <View>
-                      <Text style={styles.num2}> 1.2 </Text>
-                      <Text style={styles.min2}>  Km </Text> 
+                  <Image 
+                    style={styles.dis}
+                    source={require('../assets/distance.png')}
+                  />
+                  <Text style={styles.res}>Distance{"\n"} restante</Text>
+                  <View style={styles.textf}>
+                    <View>
+                        <Text style={styles.num2}>1.2</Text>
+                        <Text style={styles.min2}>km</Text> 
+                    </View>
+                    <View>
+                        <Text style={styles.par}>(07 min)</Text>
+                    </View>
                   </View>
-                  <View>
-                      <Text style={styles.par}> (0.7 min) </Text>
-                  </View>
-
              </View>
              </View>
              
              </View>
         </BottomSheet>
+        
         
       </>
     );
@@ -278,126 +297,128 @@ export default function Home( { navigation }) {
       borderTopLeftRadius:25,
       borderTopRightRadius:25,
     },
+    markerTitle:{
+      textAlign: 'center',
+      padding: 20,
+      fontSize: 20,
+      top: 8,
+      fontFamily:'Montserrat-ExtraBold',
+      color:'#18817C'
+    },
     first:{
       position:'absolute',
-      height: 206,
+      height:  Platform.OS === 'android' ? 206 : 220,
       width: 138,
-      left: 30,
-      top: 402,
+      left: -150,
+      top: 12,
       borderRadius: 8,
       backgroundColor: '#FFF',
       borderColor: '#1FB2AC',
-      borderWidth:3,   
+      borderWidth:2,   
     },
     sec:{
       position:'absolute',
-      height: 206,
+      height:  Platform.OS === 'android' ? 206 : 220,
       width: 138,
-      left: 192,
-      top: 402,
+      left: 12,
+      top: 12,
       borderRadius: 8,
       backgroundColor: '#FFF',
       borderColor: '#1FB2AC',
-      borderWidth:3,   
+      borderWidth:2,   
     },
     tram:{
       position: 'absolute',
       width: 21.3,
       height: 30,
-      left: 89,
-      top: 420,
+      left: 59,
+      top: 18,
     },
     prochain:{
       position: 'absolute',
-      width: 95,
-      height: 44,
-      left: 51,
-      top: 461,
-      
-      fontWeight: '600',
+      left: 21,
+      top: 59,
+      fontFamily: 'Montserrat-SemiBold',
       fontSize: 18,
-      textAlign:'center',
       color: '#000',
+    },
+    dir: {
+      position: 'absolute',
+      top:  Platform.OS === 'android' ? 3 : 0,
+      left: 12,
+      fontFamily: 'Montserrat-SemiBold',
+      fontSize: 12,
     },
     num:{
       position: 'absolute',
-      width: 106,
-      height: 88,
-      left: 46,
-      
-      fontWeight:"800",
-      fontSize: 36,
-      textAlign: 'center',
+      right: 72,
+      top: 15,
+      fontFamily: 'Montserrat-ExtraBold',
+      fontSize: 24,
       color: '#1FB2AC',
     },
     min:{
       position: 'absolute',
-      width: 106,
-      height: 88,
-      left: 46,
-      
-      fontWeight: '600',
+      left: 72,
+      top: 22,
+      fontFamily: 'Montserrat-SemiBold',
+      fontSize: 18,
+      textAlign: 'center',
+      color: '#000',
+    },
+    dir2: {
+      position: 'absolute',
+      top:  Platform.OS === 'android' ? 6 : 2,
+      left: 30,
+      fontFamily: 'Montserrat-SemiBold',
+      fontSize: 12,
+    },
+    num2:{
+      position: 'absolute',
+      right: 72,
+      fontFamily: 'Montserrat-ExtraBold',
+      fontSize: 36,
+      color: '#1FB2AC',
+    },
+    min2:{
+      position: 'absolute',
+      left: 72,
+      top: 13,
+      fontFamily: 'Montserrat-SemiBold',
       fontSize: 24,
       textAlign: 'center',
       color: '#000',
     },
     textf:{
-      top: 513,
+      bottom: -109,
+    },
+    tram2:{
+      bottom:  Platform.OS === 'android' ? -42 : -50,
     },
     dis:{
       position: 'absolute',
       width: 31.36,
       height: 30,
-      left: 245,
-      top: 420,
+      left: 53,
+      top: 18,
     },
     res:{
       position: 'absolute',
-      width: 82,
-      height: 44,
-      left: 224,
-      top: 461,
-      
-      fontWeight: '600',
+      left: 25,
+      top: 59,
+      fontFamily: 'Montserrat-SemiBold',
       fontSize: 18,
-      textAlign: 'center',
       color: '#000',
-    },
-    num2:{
-      position: 'absolute',
-      width: 103,
-      height: 70,
-      left: 209,
-      top: 520,
-      
-      fontWeight: '800',
-      fontSize: 36,
-      textAlign: 'center',
-      color:'#1FB2AC',
-
-    },
-    min2:{
-      position: 'absolute',
-      width: 103,
-      height: 70,
-      left: 209,
-      top: 520,
-      
-      fontWeight: '600',
-      fontSize: 24,
-      textAlign:'center',
-      color: '#000'
     },
     par:{
       position: 'absolute',
-      width: 103,
-      height: 70,
-      left: 209,
-      top: 520,
-      fontWeight: '600',
+      left: 13,
+      top: 45,
+      fontFamily: 'Montserrat-SemiBold',
       fontSize: 24,
       textAlign: 'center',
       color: '#807E7E',
     },
+    
     //
 });
