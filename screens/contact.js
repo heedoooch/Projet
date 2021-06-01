@@ -76,8 +76,8 @@ export default function contact({navigation}) {
                 //console.log(ip)
                 firebase.firestore().collection('contact').doc().set({
 
+                  name : Name , 
                   message : Message , 
-                  //ip : ip ,
 
                 })
                 .then(()=> {

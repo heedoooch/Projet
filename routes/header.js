@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet,Text, View,Platform} from 'react-native';
+import {StyleSheet,Text, View,Platform,Image} from 'react-native';
 import {MaterialIcons} from '@expo/vector-icons';
 
 export default function Header({navigation}){
@@ -8,22 +8,26 @@ export default function Header({navigation}){
    }
     return(
         <View style={styles.header}>
-            <MaterialIcons name='menu' size={28} onPress={openMenu} style={styles.icon}/>
+            
+            <MaterialIcons name='menu' color='#1FB2AC' size={28} onPress={openMenu} style={styles.icon}/>
             <View>
-                <Text style={styles.headerText}>Setram</Text>
+
+            <Image
+                source={require("../assets/logoo.png")}
+                style={styles.logo}
+               />
             </View>
         </View>
     );
 }
 const styles= StyleSheet.create({
     header:{
-        
         width:'100%',
         height:'90%',
         flexDirection:'row',
         alignItems:'center',
-        justifyContent:'center',
-        borderBottomWidth: 0,
+        //justifyContent:'center',
+       
     },
     headerText:{
         fontWeight: 'bold',
@@ -33,9 +37,16 @@ const styles= StyleSheet.create({
         letterSpacing:1,
      },
      icon:{
-
         position:'absolute',
-        left:  Platform.OS === 'android' ? 4 : -70
+        left:  Platform.OS === 'android' ? 4 : -95,
+
+     },
+     logo:{
+     height:120,
+     width:160,
+     resizeMode:"cover",
+     bottom:-2
+     
 
      }
 

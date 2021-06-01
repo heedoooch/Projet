@@ -1,11 +1,11 @@
-import React, { useCallback, useRef, useMemo } from 'react';
-import {useState, useEffect} from "react";
-import * as Location from 'expo-location';
-import { getDistance, getPreciseDistance, } from 'geolib';
+import React from 'react';
+import {useState} from "react";
+import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
+import { findNearest, getPreciseDistance,orderByDistance, getDistance } from 'geolib';
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
-import {markers} from './mapdata';
-import Animated from 'react-native-reanimated';
+import {markers, stations} from './mapdata';
+import { Provider as PaperProvider } from 'react-native-paper';
 import { BottomSheet } from 'react-native-btr';
 import ModalSelector from 'react-native-modal-selector-searchable';
 import MapView, { PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
@@ -41,63 +41,65 @@ const initialMapState = {
 ],
 };
 const { width, height } = Dimensions.get("window");
-const CARD_HEIGHT = 220;
-const CARD_WIDTH = width * 0.8;
-const SPACING_FOR_CARD_INSET = width * 0.1 - 10;
 export default function Home( { navigation }) {
-  const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
   const [state, setState] = React.useState(initialMapState);
   const [text, setText] = useState('');
   const mapRef = React.createRef(); 
   const [visible, setVisible] = useState(false);
-  
+  const [dialog,setDialog]=useState(false);
+  const showDialog = () => setDialog(true);
+  const [liked, setLiked] = useState(false);
+  const likedbutton=()=>{ setLiked(!liked)};
+  const hideDialog = () => setDialog(false);
+  const [station,setStation]=useState('');
+  const [userLaty,setUserLaty]=useState(0);
+  const [userLongy,setUserLongy]=useState(0);
+  const [minutes,setMinutes]=useState(0);
+  const [massafa,setMassafa]=useState(90);
+  const toggleBottomNavigationView = () => {
+    setVisible(!visible);
+       };
   var options = {
     enableHighAccuracy: true,
-    timeout: 5000,
+    timeout: 60000,
     maximumAge: 0
    };
   const success= (pos) => {
-    var crd = pos.coords;
+      var crd = pos.coords;
     console.log('Votre position actuelle est :');
       latt=crd.latitude;
       longg=crd.longitude;
+      setUserLaty(latt);
+      setUserLongy(longg);
       console.log(`Latitude : ${latt}`);
-      console.log(`Longitude : ${longg}`);
+      console.log(`Longitudeeeee :3 : ${longg}`);
       console.log(`La précision est de ${crd.accuracy} mètres.`);
     }
   const error=(err)=> {
     console.warn(`ERREUR (${err.code}): ${err.message}`);
     }
   navigator.geolocation.getCurrentPosition(success, error, options);
-  const toggleBottomNavigationView = () => {
-    setVisible(!visible);
-       };
-       /*const dis = getPreciseDistance(
-        { latitude: latt, longitude: longg},
-        { latitude: location.coordinate.latitude, longitude: location.coordinate.longitude},
-      );*/
-      /*
-    //alert('La distance est :  '+ dis +' en M ' + dis/1000 +' KM');
-    };*/
+  //console.log(JSON.stringify(orderByDistance({latitude:userLaty,longitude:userLongy},stations)));
   let  onMarkerPressed = (location) => {
     mapRef.current.animateToRegion({
       latitude: location.coordinate.latitude,
       longitude: location.coordinate.longitude,
-      latitudeDelta: 0.013912707615531872,
-      longitudeDelta: 0.010586678981781006,
-    })}
+      latitudeDelta: 0.012,
+      longitudeDelta: 0.0090586678981781006,
+    });}
     let [fontsLoaded] = useFonts({
       'Montserrat': require('../assets/fonts/Montserrat-Regular.ttf'),
       'Montserrat-ExtraBold': require('../assets/fonts/Montserrat-ExtraBold.ttf'),
       'Montserrat-SemiBold': require('../assets/fonts/Montserrat-SemiBold.ttf'),
+      'Montserrat-Medium':require('../assets/fonts/Montserrat-Medium.ttf')
     });
-  
     if (!fontsLoaded) {
       return <AppLoading />;
     }
     return (
+      <PaperProvider>
       <>
+     
         <StatusBar barStyle = "dark-content" hidden = {false}  translucent = {false}/>
         <View style={styles.container}>
             <MapView style={styles.maps} 
@@ -110,7 +112,7 @@ export default function Home( { navigation }) {
               longitudeDelta:0.04290930926799774,
               latitudeDelta:0.05637356632725954,}}
               mapType= 'terrain' 
-              onRegionChangeComplete={console.log}  
+              //onRegionChangeComplete={console.log}  
             >
             {state.markers.map((marker, index) =>  (
                       <MapView.Marker 
@@ -118,8 +120,16 @@ export default function Home( { navigation }) {
                         coordinate={marker.coordinate}
                         title={marker.label} 
                         onPress={()=>{ 
+                          onMarkerPressed(marker);
+                          setStation(marker.label);
+                          setMassafa(getDistance(
+                            { latitude: userLaty, longitude: userLongy},
+                            { latitude: marker.coordinate.latitude, longitude: marker.coordinate.longitude},));
+                          setMinutes(Math.round(massafa/83.33));
+
                           toggleBottomNavigationView();
-                          onMarkerPressed(marker);}} 
+                      } 
+                        }
                       > 
                             <View style={[styles.markerWrap]}>
                               <Image
@@ -136,24 +146,27 @@ export default function Home( { navigation }) {
             <ModalSelector
               data={markers}
               accessible={true}
-              scrollViewAccessibilityLabel={'Scrollable options'}
+              //scrollViewAccessibilityLabel={'Scrollable options'}
               //cancelButtonAccessibilityLabel={'Cancel Button'}
-              onChange={(option)=>{ setText(option.label); onMarkerPressed(option); toggleBottomNavigationView();}} >
-                
+              onChange={(option)=>{ setText(option.label);
+                                  onMarkerPressed(option); 
+                                  setStation(option.label);
+                                  setMassafa(getDistance(
+                                    { latitude: userLaty, longitude: userLongy},
+                                    { latitude: option.coordinate.latitude, longitude: option.coordinate.longitude},));
+                                  setMinutes(Math.round(massafa/83.33));
+                                  toggleBottomNavigationView();
+                                  }} >
                 <TextInput
                   placeholder="Search here"
                   placeholderTextColor="black"
                   autoCapitalize="none"
-                  style={{paddingLeft:3,width: 326,}}
+                  style={{paddingLeft:3,width: 326, }}
                   //editable={false}
                   onChangeText={text => setText(text)}
                   value={text} /> 
-                   
-                  
             </ModalSelector>
-            
             <Ionicons name="ios-search" size={20} /> 
-            
             </View>
             <ScrollView
               horizontal
@@ -169,18 +182,46 @@ export default function Home( { navigation }) {
               }}
               contentContainerStyle={{ paddingRight: Platform.OS === 'android' ? 20 : 0}}>
               {state.categories.map((category, index) => (
-                <TouchableOpacity key={index} style={styles.catItem}>
+                <TouchableOpacity key={index} style={styles.catItem} >
                     {category.icon}
-                  <Text>{category.name}</Text>
+                  <Text style={{fontFamily:"Montserrat-Medium",}}>{category.name}</Text>
                 </TouchableOpacity>))}
           </ScrollView>
+          <Button onPress={showDialog}  style={styles.dialog} color="#1FB2AC"> 
+                <Image source={require("../assets/help.png")} style={styles.icon}/>
+          </Button>
+          <Portal>
+        <Dialog visible={dialog} onDismiss={hideDialog}>
+          <Dialog.Title style={styles.alerty}>La station la plus proche 🚊: </Dialog.Title>
+          <Dialog.Content>
+            <Paragraph style={styles.near}> name of nearest station</Paragraph>
+          </Dialog.Content>
+          <Dialog.Actions>
+          <Button color= "#1FB2AC" onPress={hideDialog}> Où ?📍</Button>
+            <Button color= "#1FB2AC"  onPress={hideDialog}>Merci! 💚</Button>
+           
+          </Dialog.Actions>
+        </Dialog>
+        
+      </Portal>
         </View>
         <BottomSheet
           visible={visible}
           onBackButtonPress={toggleBottomNavigationView}
           onBackdropPress={toggleBottomNavigationView} >
           <View style={styles.bottomNavigationView}>
-          <Text style={styles.markerTitle}>La Daira</Text>
+          <View style={{flexDirection:"row",}}>
+          <Text style={styles.markerTitle}>{station}</Text>
+          <View style={{top:24, right:3,}}>
+          <Pressable onPress={likedbutton}>
+           <MaterialCommunityIcons
+            name={liked ? "heart" : "heart-outline"}
+            size={32}
+            color={liked ? "red" : "black"} />
+            
+       </Pressable>
+       </View>
+       </View>
           <View
               style={{flex: 1,flexDirection: 'column',justifyContent: 'space-between',}}>
               <View style={styles.first} >
@@ -212,11 +253,11 @@ export default function Home( { navigation }) {
                   <Text style={styles.res}>Distance{"\n"} restante</Text>
                   <View style={styles.textf}>
                     <View>
-                        <Text style={styles.num2}>1.2</Text>
+                        <Text style={styles.num2}>{massafa/1000}</Text>
                         <Text style={styles.min2}>km</Text> 
                     </View>
                     <View>
-                        <Text style={styles.par}>(07 min)</Text>
+                        <Text style={styles.par}>(~ {minutes} min)</Text>
                     </View>
                   </View>
              </View>
@@ -227,6 +268,7 @@ export default function Home( { navigation }) {
         
         
       </>
+      </PaperProvider>
     );
   }
   const styles = StyleSheet.create({
@@ -239,6 +281,14 @@ export default function Home( { navigation }) {
      top:0,
      bottom:0,
      position:'absolute',
+    },
+    alerty:{
+      fontSize:18,
+      fontFamily: 'Montserrat-ExtraBold',
+    },
+    near:{
+      fontFamily:"Montserrat-SemiBold",
+      
     },
     searchBox: {
       position:'absolute', 
@@ -274,6 +324,24 @@ export default function Home( { navigation }) {
       shadowOpacity: 0.5,
       shadowRadius: 5,
       elevation: 10,
+    },
+    dialog:{
+      top:91,
+      backgroundColor:'#fff', 
+      borderRadius:30,
+      height:40,
+      width:20,
+      shadowColor: '#1FB2AC',
+      shadowOffset: { width: 0, height: 0 },
+      shadowOpacity: 0.4,
+      shadowRadius: 5,
+      left:width-73,
+    },
+    icon:{
+      left:7,
+      height:28,
+      width:28,
+      resizeMode:"cover",
     },
     markerWrap: {
       alignItems: "center",
@@ -375,17 +443,18 @@ export default function Home( { navigation }) {
     },
     num2:{
       position: 'absolute',
-      right: 72,
+      right: 60,
+      left:7,
       fontFamily: 'Montserrat-ExtraBold',
-      fontSize: 36,
+      fontSize: 22,
       color: '#1FB2AC',
     },
     min2:{
       position: 'absolute',
-      left: 72,
-      top: 13,
+      left: 76,
+      top: 1,
       fontFamily: 'Montserrat-SemiBold',
-      fontSize: 24,
+      fontSize: 22,
       textAlign: 'center',
       color: '#000',
     },
@@ -415,7 +484,7 @@ export default function Home( { navigation }) {
       left: 13,
       top: 45,
       fontFamily: 'Montserrat-SemiBold',
-      fontSize: 24,
+      fontSize: 22,
       textAlign: 'center',
       color: '#807E7E',
     },
