@@ -1,8 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, TouchableHighlight, View, ScrollView, Image, Touch, TouchableOpacity, Platform , Pressable } from 'react-native';
+import { StyleSheet, Text,View, ScrollView, Image,TouchableOpacity, Platform  } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import Constants from 'expo-constants';
+import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 //import path from 'react-native-path';
 
 export default function Profile({navigation}) {
@@ -14,7 +16,7 @@ export default function Profile({navigation}) {
     try {
         const lname = ( await AsyncStorage.getItem('Lname') ) || "user"
         const fname = await AsyncStorage.getItem('Fname')    
-            onChangeName(lname + " " + fname)
+            onChangeName(lname + "" + fname)
     } catch(e) {
     throw e ;
     }
@@ -62,18 +64,30 @@ getname();
       useAsyncStorage (result.uri); 
     }
   }
+  let [fontsLoaded] = useFonts({
+    'Montserrat-ExtraBold': require('../assets/fonts/Montserrat-ExtraBold.ttf'),
+    'Montserrat-SemiBold': require('../assets/fonts/Montserrat-SemiBold.ttf'),
+});
+  
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
   return (
     <ScrollView>
     <View> 
-     
-       <View style={{width:'100%',backgroundColor:'#ffffff',height:150,padding:10,}}>
-            
-       </View>
-    <View style ={{alignContent:'center',marginLeft:20,}} >
-       <Image source = {{uri:image}}  style = {{width:140,height:140,borderRadius:100,marginTop:-70}}/>
-       <Text style={{fontSize:25,fontWeight:'bold',padding:10}}>{Name}</Text>
-       <Text style={{fontSize:15,fontWeight:'bold',color:'grey', marginLeft:10}}>{age + " ans."} </Text>
+     <View style={{width:'100%',backgroundColor:'#ffffff',height:120,padding:10,}}>
     </View>
+     <View style={{flex:1,flexDirection:"row", left:20}}>
+      <TouchableOpacity onPress={pickImage}>
+       <Image source = {{uri:image}}
+              style = {{width:130,height:130,borderRadius:100,
+                      borderWidth:3,borderColor:"#1FB2AC",marginTop:-70}}/>
+        </TouchableOpacity>
+        <View stylw={{flexDirection:"row", }}>
+       <Text style={{fontSize:20,fontFamily:"Montserrat-SemiBold",left:9,letterSpacing:-0.5}}>{Name}</Text>
+       <Text style={{fontSize:15,color:'grey', }}> {age + " ans."} </Text> 
+       </View>
+      </View>
     <View  style ={{alignSelf:'center'
                       ,flexDirection:'row',
                       justifyContent:'center',
@@ -81,8 +95,8 @@ getname();
                       ,width:'90%',
                       padding:20,
                       paddingBottom:22,
-                      borderRadus:10,
-                      shadowOpacity:80,
+                      borderRadius:20,
+                      shadowOpacity:10,
                       elevation:15,
                       marginTop:20
             }} > 
@@ -96,7 +110,7 @@ getname();
                       ,width:'90%',
                       padding:20,
                       paddingBottom:22,
-                      borderRadus:10,
+                      borderRadius:20,
                       shadowOpacity:80,
                       elevation:15,
                       marginTop:20
@@ -104,22 +118,7 @@ getname();
       <Image source = {require('../assets/tram.png')}  style = {{width:20,height:20}}/>
       <Text style={{ fontSize:15,color:'#818181',fontWeight:'bold'}}>Home Adresse </Text>
     </View>
-    <TouchableOpacity  style ={{alignSelf:'center'
-                      ,flexDirection:'row',
-                      justifyContent:'center',
-                      backgroundColor:'#1FB2AC'
-                      ,width:'90%',
-                      padding:20,
-                      paddingBottom:22,
-                      borderRadus:10,
-                      shadowOpacity:80,
-                      elevation:15,
-                      marginTop:20,
-                      marginBottom:40
-            }} 
-            onPress={pickImage}> 
-      <Text style={{fontSize:15,color:'#fff',fontWeight:'bold'}}>Edit picture</Text>
-        </TouchableOpacity>
+    
         <TouchableOpacity  style ={{alignSelf:'center'
                       ,flexDirection:'row',
                       justifyContent:'center',
@@ -135,8 +134,7 @@ getname();
             onPress={ ()=> navigation.push('edit')}> 
       <Text style={{fontSize:15,color:'#fff',fontWeight:'bold'}}>Edit data</Text>
         </TouchableOpacity>
-
-   </View>
+      </View>
    </ScrollView>  
   );
 }

@@ -95,7 +95,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        padding: 16,
+        marginHorizontal:10,
+        marginVertical:10,
       },
     par: {
         fontSize:15,
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
     title:{
         fontWeight: 'bold',
         fontSize:24,
-        margin: 16,
+        //margin: 16,
         color:'#1FB2AC',
     },
     item:{

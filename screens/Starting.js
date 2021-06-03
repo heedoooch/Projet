@@ -1,8 +1,9 @@
  import { StatusBar } from 'expo-status-bar';
  import React from 'react';
- import { StyleSheet, Text, View, Image, TextInput, SafeAreaView, Pressable } from 'react-native';
+ import { StyleSheet, Text, View, Image, TextInput, SafeAreaView, Pressable,KeyboardAvoidingView,Platform,Keyboard,TouchableWithoutFeedback } from 'react-native';
  import { LinearGradient } from 'expo-linear-gradient';
  import AsyncStorage from '@react-native-async-storage/async-storage';
+
   
  
  export default function starting({navigation}) {
@@ -13,6 +14,11 @@
    const [Lname, onChangeLname] = React.useState(null);
    const [text, setText] = React.useState('get started');
    return (
+
+    <KeyboardAvoidingView
+    behavior={Platform.OS === "ios" ? "padding" : "height"}
+    style={styles.container}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
      <SafeAreaView style={styles.container}>
        <LinearGradient
          colors={['#65DDD8', '#1FB2AC']}
@@ -68,6 +74,9 @@
  
        <StatusBar style="auto" />
      </SafeAreaView>
+
+     </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
    );
  }
  

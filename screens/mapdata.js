@@ -5,7 +5,7 @@ export const markers = [
      label: "La Daira",},
      {coordinate: {latitude: 35.19636464,longitude:-0.6208714,},
      label: "La Radio",},
-     {coordinate: {latitude: 35.2114022,longitude:-0.6279301,},
+     {coordinate: {latitude: 35.2114022,longitude:-0.6279301, name:"radioAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASSSSSSSSSSSSS",},
      label: "El Wiaam",},
      {coordinate: { latitude: 35.2161381,longitude:-0.6244173,},
      label: "Environnement",},
@@ -45,7 +45,7 @@ export const markers = [
      label: "Nouvelle Garre Routière",},
      ];
 export const stations = [ 
-        {latitude: 35.1907099,longitude:-0.6345366,}, 
+        {latitude: 35.1907099,longitude:-0.6345366, } ,
         {latitude:35.205983163318884,longitude:-0.6264084696042183}, 
          {latitude: 35.19636464,longitude:-0.6208714,},
          {latitude: 35.2114022,longitude:-0.6279301,},

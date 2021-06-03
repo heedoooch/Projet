@@ -1,5 +1,5 @@
 import React from 'react';
-import {useState} from "react";
+import {useState , useEffect} from "react";
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 import { findNearest, getPreciseDistance,orderByDistance, getDistance } from 'geolib';
 import { useFonts } from 'expo-font';
@@ -12,14 +12,16 @@ import MapView, { PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
 import { StyleSheet, View ,Image,StatusBar,Platform,ScrollView,Text, TextInput,Dimensions,Pressable,TouchableOpacity} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const initialMapState = {
   markers,
   categories: [
     {
-      name: 'Home',
+      name: 'Maison',
       icon:<MaterialCommunityIcons name="home-variant" style={{marginRight: 5}} size={18} />,},
       { 
-        name: 'Work', 
+        name: 'Travial', 
         icon: <MaterialCommunityIcons style={{marginRight: 5}} name="briefcase" size={18} />,
       },
       {
@@ -49,13 +51,22 @@ export default function Home( { navigation }) {
   const [dialog,setDialog]=useState(false);
   const showDialog = () => setDialog(true);
   const [liked, setLiked] = useState(false);
-  const likedbutton=()=>{ setLiked(!liked)};
   const hideDialog = () => setDialog(false);
   const [station,setStation]=useState('');
   const [userLaty,setUserLaty]=useState(0);
   const [userLongy,setUserLongy]=useState(0);
   const [minutes,setMinutes]=useState(0);
   const [massafa,setMassafa]=useState(90);
+  const [proche,setProche]=useState();
+  const likedbutton= async(station)=>{ 
+    await AsyncStorage.getItem('favoris');
+    const obj =  JSON.parse(favoris);
+    if (station in obj )
+      setLiked(true);
+    
+    
+  };
+
   const toggleBottomNavigationView = () => {
     setVisible(!visible);
        };
@@ -79,7 +90,19 @@ export default function Home( { navigation }) {
     console.warn(`ERREUR (${err.code}): ${err.message}`);
     }
   navigator.geolocation.getCurrentPosition(success, error, options);
-  //console.log(JSON.stringify(orderByDistance({latitude:userLaty,longitude:userLongy},stations)));
+  console.log(JSON.stringify(orderByDistance({latitude:userLaty,longitude:userLongy},stations)));
+  var nearest = orderByDistance({latitude:userLaty,longitude:userLongy},stations)[0].latitude ;
+  console.log (nearest);
+  useEffect(() => {
+    markers.forEach(element => {
+      if (element.coordinate.latitude == nearest) {
+            setProche(element);
+            console.log('\n \n hiiiiiiiiiiiii23i45672345678w34567',proche);
+            return ;
+      }
+    } )
+  });
+ 
   let  onMarkerPressed = (location) => {
     mapRef.current.animateToRegion({
       latitude: location.coordinate.latitude,
@@ -158,7 +181,7 @@ export default function Home( { navigation }) {
                                   toggleBottomNavigationView();
                                   }} >
                 <TextInput
-                  placeholder="Search here"
+                  placeholder="Recherche ..."
                   placeholderTextColor="black"
                   autoCapitalize="none"
                   style={{paddingLeft:3,width: 326, }}
@@ -166,7 +189,7 @@ export default function Home( { navigation }) {
                   onChangeText={text => setText(text)}
                   value={text} /> 
             </ModalSelector>
-            <Ionicons name="ios-search" size={20} /> 
+            <Ionicons name="ios-search" size={20}  color="#1FB2AC"/> 
             </View>
             <ScrollView
               horizontal
@@ -194,7 +217,7 @@ export default function Home( { navigation }) {
         <Dialog visible={dialog} onDismiss={hideDialog}>
           <Dialog.Title style={styles.alerty}>La station la plus proche 🚊: </Dialog.Title>
           <Dialog.Content>
-            <Paragraph style={styles.near}> name of nearest station</Paragraph>
+            <Paragraph style={styles.near}> {proche.label}</Paragraph>
           </Dialog.Content>
           <Dialog.Actions>
           <Button color= "#1FB2AC" onPress={hideDialog}> Où ?📍</Button>
@@ -207,8 +230,8 @@ export default function Home( { navigation }) {
         </View>
         <BottomSheet
           visible={visible}
-          onBackButtonPress={toggleBottomNavigationView}
-          onBackdropPress={toggleBottomNavigationView} >
+          //onBackButtonPress={toggleBottomNavigationView}
+          onBackdropPress={toggleBottomNavigationView}>
           <View style={styles.bottomNavigationView}>
           <View style={{flexDirection:"row",}}>
           <Text style={styles.markerTitle}>{station}</Text>

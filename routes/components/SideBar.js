@@ -31,6 +31,7 @@ export default SideBar = props => {
     }
     getname();
     let [fontsLoaded] = useFonts({
+        'Montserrat-ExtraBold': require('../../assets/fonts/Montserrat-ExtraBold.ttf'),
         'Montserrat-SemiBold': require('../../assets/fonts/Montserrat-SemiBold.ttf'),
     });
       
@@ -69,7 +70,6 @@ const styles=StyleSheet.create({
         color: "#38B497",
         fontWeight:'800',
         marginVertical:8,
-        letterSpacing:1,
 
 
 
